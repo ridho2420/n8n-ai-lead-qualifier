@@ -1,0 +1,1002 @@
+{
+  "name": "Northwind – Lead Qualifier",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 1. Intake\nContact form submission + workflow settings (test mode).",
+        "height": 308,
+        "width": 456,
+        "color": 4
+      },
+      "id": "a0227ef5-c0b2-49ca-bef9-af2d72bf259f",
+      "name": "Sticky: Intake",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1008,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Scoring\nBudget, timeline and company size are scored by code (deterministic). AI only judges the need, flags spam / job seekers, and writes the reason.",
+        "height": 520,
+        "width": 988,
+        "color": 6
+      },
+      "id": "64f542fc-5bc9-458e-9bd3-0532ba845473",
+      "name": "Sticky: Scoring",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "Contact Northwind Digital",
+        "formDescription": "Tell us about your project. We usually reply within one business day.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Full name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Work email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Company size",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Just me"
+                  },
+                  {
+                    "option": "2–10"
+                  },
+                  {
+                    "option": "11–50"
+                  },
+                  {
+                    "option": "51–200"
+                  },
+                  {
+                    "option": "201+"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Estimated budget",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Under $5,000"
+                  },
+                  {
+                    "option": "$5,000–$10,000"
+                  },
+                  {
+                    "option": "$10,000–$25,000"
+                  },
+                  {
+                    "option": "$25,000+"
+                  },
+                  {
+                    "option": "Not sure yet"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "When do you want to start?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Within 1 month"
+                  },
+                  {
+                    "option": "1–3 months"
+                  },
+                  {
+                    "option": "3–6 months"
+                  },
+                  {
+                    "option": "Just exploring"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "What do you need help with?",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7f6a6a27-7789-4460-958a-8f5d7212d26b",
+      "name": "Lead Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -896,
+        64
+      ],
+      "webhookId": "8cdffd86-690b-4597-8d7b-1ad7134bf908"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "60c393c0-7c11-4f50-9594-93939b82efd1",
+              "name": "test_mode",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "def6d8b5-ff3c-419f-88cc-7fd842e85420",
+              "name": "test_inbox",
+              "value": "you@example.com",
+              "type": "string"
+            },
+            {
+              "id": "53f2a59d-e41a-42c8-b097-ce2aaa20996a",
+              "name": "simulate_crm_error_for",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "5c0cb302-3b3c-42b0-9ac0-868b52ad9395",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -672,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Prepare Lead\n// Normalizes form input (form labels OR snake_case keys from pinned test data)\n// and calculates the deterministic part of the score: budget, timeline, company size.\nconst i = $json;\n\nconst pick = (...keys) => {\n  for (const k of keys) {\n    const v = i[k];\n    if (v !== undefined && v !== null && String(v).trim() !== '') return String(v).trim();\n  }\n  return '';\n};\n\n// Treat en dash / em dash and hyphen the same, so \"2–10\" and \"2-10\" both match\nconst norm = (s) => s.replace(/[–—]/g, '-');\n\nconst lead = {\n  name: pick('name', 'Full name'),\n  email: pick('email', 'Work email').toLowerCase(),\n  company: pick('company', 'Company'),\n  company_size: pick('company_size', 'Company size'),\n  budget: pick('budget', 'Estimated budget'),\n  timeline: pick('timeline', 'When do you want to start?'),\n  need: pick('need', 'What do you need help with?'),\n};\n\nconst BUDGET = { '$25,000+': 35, '$10,000-$25,000': 25, '$5,000-$10,000': 15, 'Not sure yet': 10, 'Under $5,000': 5 };\nconst TIMELINE = { 'Within 1 month': 25, '1-3 months': 20, '3-6 months': 10, 'Just exploring': 3 };\nconst SIZE = { 'Just me': 3, '2-10': 8, '11-50': 15, '51-200': 15, '201+': 10 };\n\nreturn {\n  json: {\n    ...lead,\n    score_budget: BUDGET[norm(lead.budget)] ?? 0,\n    score_timeline: TIMELINE[norm(lead.timeline)] ?? 0,\n    score_size: SIZE[norm(lead.company_size)] ?? 0,\n    test_mode: i.test_mode === true,\n    test_inbox: i.test_inbox || '',\n    submitted_at: new Date().toISOString(),\n    raw_input: JSON.stringify(lead),\n  },\n};\n"
+      },
+      "id": "b82de433-1bfa-4a0a-8fcc-bc09f7e9ddaf",
+      "name": "Prepare Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a lead qualification assistant for Northwind Digital, a software agency that builds custom web applications, mobile apps, internal business tools, and integrations between business systems.\n\nAssess ONLY the lead's need and intent. Budget, timeline and company size are scored separately by another step, so do not score them.\n\nLead:\n- Name: {{ $json.name }}\n- Company: {{ $json.company }}\n- Company size: {{ $json.company_size }}\n- Budget: {{ $json.budget }}\n- Timeline: {{ $json.timeline }}\n- Need: {{ $json.need }}\n\nRules:\n1. need_fit (must be exactly 0, 12 or 25):\n   - 25 = clearly matches Northwind's services (custom web app, mobile app, internal tool, system integration or workflow automation).\n   - 12 = partial or vague match (simple brochure website, early idea without specifics).\n   - 0 = outside Northwind's services (SEO, ads, graphic design, recruitment) or no real need.\n2. is_spam = true for gibberish, test text, promotions, crypto, or an empty or meaningless need.\n3. is_job_seeker = true if the person is looking for a job or internship, or is selling their own services to Northwind.\n4. reason = 1-2 short sentences in English for the sales team, maximum 35 words.\n   - For a real potential client: name the need first, then mention budget and timeline.\n   - If is_job_seeker is true: say what the person is actually asking for (for example an internship). Do not mention budget or timeline.\n   - If is_spam is true: start with \"SPAM:\" and say why. Do not mention budget or timeline.\n   - Write naturally. Do not use phrases like \"As context\" or \"contextual factors\".\n   - Always start with the person's first name, for example \"Sarah needs ...\".",
+        "hasOutputParser": true
+      },
+      "id": "ad2abd60-2af9-4085-9196-95faaad31355",
+      "name": "AI: Assess Need",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        -288,
+        64
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "id": "f82b1060-e8aa-4c5f-97c3-affe633ccc02",
+      "name": "Gemini Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"need_fit\": {\n      \"type\": \"integer\",\n      \"enum\": [\n        0,\n        12,\n        25\n      ]\n    },\n    \"is_spam\": {\n      \"type\": \"boolean\"\n    },\n    \"is_job_seeker\": {\n      \"type\": \"boolean\"\n    },\n    \"reason\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"need_fit\",\n    \"is_spam\",\n    \"is_job_seeker\",\n    \"reason\"\n  ]\n}"
+      },
+      "id": "e49fcd6a-c2bf-4c24-b39f-2c68bac77d9f",
+      "name": "Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -112,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Combine Score\n// Adds the AI's need assessment to the deterministic scores,\n// applies the special rules, and sets the final category.\n// If the AI call failed, the lead is flagged so the next node can send it to the error path.\n// The AI node returns exactly one item per lead, in the same order,\n// so the matching lead is found by position.\nconst lead = $('Prepare Lead').all()[$itemIndex].json;\n\nif ($json.error) {\n  return { json: { ...lead, ai_failed: true, error: $json.error } };\n}\n\nconst ai = $json.output || {};\n\nconst fit = [0, 12, 25].includes(Number(ai.need_fit)) ? Number(ai.need_fit) : 0;\nconst isSpam = ai.is_spam === true;\nconst isJobSeeker = ai.is_job_seeker === true;\n\nlet score = lead.score_budget + lead.score_timeline + fit + lead.score_size;\nif (isSpam) score = 0;\nelse if (isJobSeeker) score = Math.min(score, 10);\n\nconst category = score >= 70 ? 'hot' : score >= 40 ? 'warm' : 'cold';\n\nlet reason = String(ai.reason || '').trim();\nif (isSpam && !reason.startsWith('SPAM:')) reason = 'SPAM: ' + reason;\n\nreturn {\n  json: {\n    ...lead,\n    ai_failed: false,\n    need_fit: fit,\n    is_spam: isSpam,\n    is_job_seeker: isJobSeeker,\n    lead_score: score,\n    lead_category: category,\n    lead_reason: reason,\n  },\n};"
+      },
+      "id": "9464baf5-1aa6-4f3e-8215-8909ff093f7d",
+      "name": "Combine Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3. Spam filter\nSpam never reaches the CRM and gets no auto-reply. It is only logged.",
+        "height": 312,
+        "width": 500,
+        "color": 3
+      },
+      "id": "8f6bec0e-e13b-4437-9d9c-9115a3e28421",
+      "name": "Sticky: Spam Filter",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4. CRM\nCreate or update the HubSpot contact by email, with score, category and reason. Detects returning leads.",
+        "height": 456,
+        "width": 456,
+        "color": 5
+      },
+      "id": "baf6e531-cd76-458e-82e8-b66140463c5d",
+      "name": "Sticky: CRM",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        976,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "93b49675-3d6d-4f43-85c7-6d4abe73f001",
+              "leftValue": "={{ $json.is_spam }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ba48e2c6-9831-4132-8fba-3b2dd3fb6661",
+      "name": "Is Spam?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_ERROR_LOG_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "errors"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.submitted_at }}",
+            "step": "spam_filter",
+            "error_message": "={{ $json.lead_reason }}",
+            "lead_email": "={{ $json.email }}",
+            "raw_input": "={{ $json.raw_input }}",
+            "execution_id": "={{ $execution.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "step",
+              "displayName": "step",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_email",
+              "displayName": "lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_input",
+              "displayName": "raw_input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "execution_id",
+              "displayName": "execution_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "3db27ed4-f4fd-4000-8cc3-6415ba345b03",
+      "name": "Log Spam",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        784,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ inputs: [{ idProperty: 'email', id: $json.email, properties: { email: $json.email, firstname: $json.name.split(' ')[0], lastname: $json.name.split(' ').slice(1).join(' '), company: $json.company, lead_score: $json.lead_score, lead_category: ($json.email === $('Config').first().json.simulate_crm_error_for ? 'simulated_error' : $json.lead_category), lead_reason: $json.lead_reason } }] }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 300
+            }
+          }
+        }
+      },
+      "id": "7b0c9331-fc84-4db4-9f77-95aea6f0c351",
+      "name": "HubSpot: Upsert Contact",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        208
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Merge CRM Result\n// Adds the HubSpot contact ID, the link HubSpot returns, and whether this is a returning lead.\nconst lead = $('Combine Score').item.json;\nconst result = ($json.results || [])[0] || {};\n\nreturn {\n  json: {\n    ...lead,\n    hubspot_id: result.id || null,\n    is_returning: result.new === false,\n    hubspot_url: result.url || null,\n  },\n};"
+      },
+      "id": "567dcd50-a0d6-4050-9eb2-88e309d7eaae",
+      "name": "Merge CRM Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 5. Notify sales\nHot leads are posted to #hot-leads with score, reason and a link to the HubSpot contact.",
+        "height": 266,
+        "width": 520,
+        "color": 2
+      },
+      "id": "0b9be189-e55a-488b-add5-80dd41336fae",
+      "name": "Sticky: Notify Sales",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 6. Auto-reply\nEvery real lead gets a reply. Test mode routes all replies to the test inbox.",
+        "height": 268,
+        "width": 520,
+        "color": 7
+      },
+      "id": "ed75721c-83de-40e7-93fc-19cdbb2e2864",
+      "name": "Sticky: Auto-Reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b37e5389-b618-41c9-9bee-a82698fcde7d",
+              "leftValue": "={{ $json.lead_category }}",
+              "rightValue": "hot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c45f4cda-f40e-4f45-a581-5f7774705cf9",
+      "name": "Is Hot?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1504,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "YOUR_HOT_LEADS_CHANNEL_ID",
+          "mode": "id"
+        },
+        "text": "=:fire: *{{ $json.is_returning ? 'Returning hot lead' : 'New hot lead' }}: {{ $json.name }}* ({{ $json.company }})\n*Score:* {{ $json.lead_score }}/100\n*Budget:* {{ $json.budget }}  ·  *Timeline:* {{ $json.timeline }}  ·  *Size:* {{ $json.company_size }}\n*Email:* {{ $json.email }}\n*Why:* {{ $json.lead_reason }}\n<{{ $json.hubspot_url }}|Open contact in HubSpot>",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "d7e852c6-9aba-41f0-9d2c-76e0efb91cb1",
+      "name": "Slack: Hot Lead Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1744,
+        32
+      ],
+      "webhookId": "2a527c2a-aa3c-4e68-937f-528f269787d1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.test_mode ? $json.test_inbox : $json.email }}",
+        "subject": "={{ $json.test_mode ? '[TEST → ' + $json.email + '] ' : '' }}Thanks for contacting Northwind Digital",
+        "emailType": "text",
+        "message": "=Hi {{ $json.name.split(' ')[0] }},\n\nThanks for reaching out to Northwind Digital. We've received your message:\n\n\"{{ $json.need }}\"\n\n{{ $json.is_job_seeker ? \"We don't hire through this form, but we've passed your message to our team. If a suitable role opens up, we'll be in touch.\" : ($json.lead_category === 'hot' ? \"One of our solution consultants will contact you within one business day to discuss next steps.\" : \"Our team will review your request and get back to you within three business days.\") }}\n\nBest regards,\nThe Northwind Digital team",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Northwind Digital"
+        }
+      },
+      "id": "65a21075-eab3-40a2-8f61-1f5b9142b57a",
+      "name": "Gmail: Auto-Reply",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1584,
+        304
+      ],
+      "webhookId": "a2d639bf-ef25-48e5-9771-8d75ecbb55b4"
+    },
+    {
+      "parameters": {
+        "content": "## 7. Error handling\nIf the AI still fails after 3 attempts, or HubSpot rejects the contact, the lead is not lost: it is saved to the Error Log with its original input, and the team is alerted in #automation-errors.",
+        "height": 420,
+        "width": 1060,
+        "color": 3
+      },
+      "id": "5321e7e8-b56f-4738-b0df-0454ce344e1a",
+      "name": "Sticky: Error Handling",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        896,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7c0ef4aa-921c-407f-b2b2-da6ceef484c3",
+              "name": "step",
+              "value": "ai_scoring",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "71784515-c606-4265-bc68-f8d369230a6f",
+      "name": "Mark: AI Failed",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1232,
+        768
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1bf2cceb-637f-47bd-b70b-d2a2b449a700",
+              "name": "step",
+              "value": "hubspot_upsert",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "5a10bc19-0c9f-4a5f-8c47-4ee3b87e4182",
+      "name": "Mark: CRM Failed",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1232,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Prepare Error\n// Turns a lead that failed (AI or HubSpot) into one Error Log row.\n// The original form input is kept in raw_input, so the lead is never lost and can be re-processed.\nlet lead = {};\ntry { lead = $('Combine Score').item.json; } catch (e) { lead = $json; }\n\nconst err = $json.error;\nlet message = 'Unknown error';\nif (typeof err === 'string') {\n  message = err;\n} else if (err) {\n  message = err.message || JSON.stringify(err);\n  if (err.description && !message.includes(err.description)) message += ' | ' + err.description;\n}\n\nreturn {\n  json: {\n    timestamp: new Date().toISOString(),\n    step: $json.step,\n    error_message: String(message).slice(0, 500),\n    lead_email: lead.email || '',\n    raw_input: lead.raw_input || '',\n    execution_id: $execution.id,\n  },\n};"
+      },
+      "id": "c645cca6-7bfb-4f74-8cc5-a9655682f4ff",
+      "name": "Prepare Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_ERROR_LOG_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "errors"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "step",
+              "displayName": "step",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error_message",
+              "displayName": "error_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_email",
+              "displayName": "lead_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_input",
+              "displayName": "raw_input",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "execution_id",
+              "displayName": "execution_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "26fe073b-bfa0-4c59-bb2b-efe482ef2b01",
+      "name": "Log Error",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1680,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_ERRORS_CHANNEL_ID"
+        },
+        "text": "=:warning: *Lead not processed* · step `{{ $json.step }}`\n*Lead:* {{ $json.raw_input ? JSON.parse($json.raw_input).name : 'unknown' }} ({{ $json.lead_email }})\n*Error:* {{ $json.error_message }}\n*Execution:* {{ $json.execution_id }} · saved to Error Log for manual follow-up",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "673bcc16-04cc-4616-b0b6-06293309711d",
+      "name": "Slack: Error Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1680,
+        768
+      ],
+      "webhookId": "6ccc0efb-8f08-4c65-880d-1613102be2bb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0d8db4e7-827b-48f9-8862-2f506e0b8db3",
+              "leftValue": "={{ $json.ai_failed }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "08ffb3e8-fac6-45c0-a692-6f3d76dc1b4e",
+      "name": "AI Failed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        64
+      ]
+    }
+  ],
+  "connections": {
+    "Lead Form": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Prepare Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Lead": {
+      "main": [
+        [
+          {
+            "node": "AI: Assess Need",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI: Assess Need": {
+      "main": [
+        [
+          {
+            "node": "Combine Score",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Gemini Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI: Assess Need",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI: Assess Need",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Spam?": {
+      "main": [
+        [
+          {
+            "node": "Log Spam",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HubSpot: Upsert Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot: Upsert Contact": {
+      "main": [
+        [
+          {
+            "node": "Merge CRM Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark: CRM Failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Score": {
+      "main": [
+        [
+          {
+            "node": "AI Failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Hot?": {
+      "main": [
+        [
+          {
+            "node": "Slack: Hot Lead Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge CRM Result": {
+      "main": [
+        [
+          {
+            "node": "Is Hot?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail: Auto-Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark: AI Failed": {
+      "main": [
+        [
+          {
+            "node": "Prepare Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark: CRM Failed": {
+      "main": [
+        [
+          {
+            "node": "Prepare Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Error": {
+      "main": [
+        [
+          {
+            "node": "Log Error",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Slack: Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Failed?": {
+      "main": [
+        [
+          {
+            "node": "Mark: AI Failed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Spam?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "tags": []
+}
