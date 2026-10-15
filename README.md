@@ -76,7 +76,7 @@ Measured on n8n 2.35.7 with free plans, October 2026, using the 12 fictional sub
 
 ## How I built this
 
-I built this with Claude (Anthropic) as my pair programmer. Claude drafted the Code node logic, the AI prompt and this README. I decided the scoring rules and design trade-offs, set up every account, built and connected the workflow in n8n, and ran all the tests, including breaking it on purpose to check the error paths.
+I built this with Claude (Anthropic) as my pair programmer. Claude drafted the first version of the workflow, the Code node logic, the AI prompt and this README. I made the design calls: what code scores and what the AI judges, what happens when a step fails, and how test mode keeps test emails away from real leads. I set up HubSpot, Slack and Google Cloud from scratch, configured and debugged the workflow in n8n, and tested it with 12 fictional leads. Then I ran two failure tests, one where HubSpot rejects a lead and one where the AI is down, to confirm that no lead is lost.
 
 ## How to run it
 
