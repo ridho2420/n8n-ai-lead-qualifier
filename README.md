@@ -74,6 +74,10 @@ Measured on n8n 2.35.7 with free plans, October 2026, using the 12 fictional sub
 - **Gmail** for auto-replies
 - **Google Sheets** as the error log
 
+## How I built this
+
+I built this with Claude (Anthropic) as my pair programmer. Claude drafted the Code node logic, the AI prompt and this README. I decided the scoring rules and design trade-offs, set up every account, built and connected the workflow in n8n, and ran all the tests, including breaking it on purpose to check the error paths.
+
 ## How to run it
 
 ### 1. Accounts and keys
