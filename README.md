@@ -4,6 +4,8 @@ Scores every contact form submission, saves it to HubSpot, alerts sales in Slack
 
 > **Demo project.** Built for a fictional software agency, *Northwind Digital*, and tested with fictional leads. No real customer data was used.
 
+**Demo video (2 min):** [watch it on LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7518498370936537088/)
+
 ![Workflow canvas](images/workflow-canvas.png)
 
 ## The problem
@@ -128,4 +130,4 @@ images/workflow-canvas.png          Screenshot of the workflow
 
 ## About
 
-Built by **Ridho Subkhan**, AI automation with n8n.
+Built by **Ridho Subkhan**, AI automation with n8n. [LinkedIn](https://www.linkedin.com/in/ridho-subkhan/) · [GitHub](https://github.com/ridho2420)
