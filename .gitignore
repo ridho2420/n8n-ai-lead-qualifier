@@ -8,3 +8,7 @@ credentials*.json
 .DS_Store
 *.mov
 *.mp4
+
+# Raw test run outputs (they contain the private test inbox address).
+# Only the cleaned results in evals/results/ are committed.
+evals/runs/

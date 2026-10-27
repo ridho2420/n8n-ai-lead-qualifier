@@ -1,0 +1,61 @@
+run,lead,name,company,need_fit,is_spam,is_job_seeker,lead_score,lead_category,ai_failed,lead_reason
+1,1,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a custom client shipment tracking portal with SAP integration, backed by a $25,000+ budget and a 1-month timeline."
+1,2,Marcus Okafor,Okafor Dental Group,25,false,false,85,hot,false,"Marcus needs a patient booking mobile app for iOS and Android integrated with clinic management software, with a budget of $10,000–$25,000 and a 1–3 month timeline."
+1,3,Elena Rossi,Rossi & Partners Law,25,false,false,75,hot,false,"Elena needs an internal tool to manage case documents and court deadlines, with a budget of $10,000–$25,000 and a timeline of 3–6 months."
+1,4,Daniel Moreno,Moreno Coffee Roasters,25,false,false,80,hot,false,"Daniel needs to sync his Shopify store with an inventory sheet and Xero for accounting. They have a budget of $5,000–$10,000 and a timeline within 1 month."
+1,5,James Whitaker,Whitaker Home Renovations,25,false,false,68,warm,false,"James needs a website quote calculator and automatic follow-up emails. The budget is $5,000–$10,000 with a timeline of 1–3 months."
+1,6,Priya Nair,Lumen Yoga Studio,12,false,false,45,warm,false,"Priya needs a simple website for her studio showing the weekly class schedule, with a budget under $5,000 and a 1-3 month timeline."
+1,7,Tom Becker,Becker Manufacturing GmbH,25,false,false,48,warm,false,Tom needs a custom internal tool to digitize machine maintenance reports. He is unsure about the budget and is just exploring timelines.
+1,8,Aisha Rahman,Rahman Consulting,12,false,false,23,cold,false,"Aisha has an early idea for a freelancer app with no concrete plans yet. She has a budget under $5,000 and a timeline of just exploring."
+1,9,Grace Kim,Kim Realty,0,false,false,28,cold,false,"Grace needs SEO and Facebook ads for property listings, which is outside our services. Budget is unsure and timeline is 3-6 months."
+1,10,Kevin Liu,Student,0,false,true,10,cold,false,Kevin is looking for an internship at the company rather than seeking software development services.
+1,11,asdf,qwerty,0,true,false,0,cold,false,SPAM: The lead submitted gibberish and crypto promotional text.
+1,12,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a mobile version of their client portal. They have a budget of $25,000+ and a timeline of within 1 month."
+2,1,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a custom web portal with real-time shipment tracking that integrates with SAP. The budget is $25,000+ with a timeline within 1 month."
+2,2,Marcus Okafor,Okafor Dental Group,25,false,false,85,hot,false,"Marcus needs a patient booking mobile app connected to clinic management software, with a budget of $10,000–$25,000 and a timeline of 1–3 months."
+2,3,Elena Rossi,Rossi & Partners Law,25,false,false,75,hot,false,"Elena needs an internal tool to manage case documents and court deadlines, with a budget of $10,000–$25,000 and a timeline of 3–6 months."
+2,4,Daniel Moreno,Moreno Coffee Roasters,25,false,false,80,hot,false,"Daniel needs an integration between Shopify, an inventory sheet, and Xero. The budget is $5,000–$10,000 with a timeline of within 1 month."
+2,5,James Whitaker,Whitaker Home Renovations,25,false,false,68,warm,false,"James needs a website quote calculator and automatic follow-up emails, aligning with workflow automation and custom web development. They have a budget of $5,000–$10,000 and a timeline of 1–3 months."
+2,6,Priya Nair,Lumen Yoga Studio,12,false,false,45,warm,false,"Priya needs a simple website for her studio showing class schedules. The budget is under $5,000 with a 1–3 month timeline."
+2,7,Tom Becker,Becker Manufacturing GmbH,25,false,false,48,warm,false,Tom needs a custom internal tool to digitize machine maintenance reports. He is unsure about the budget and is just exploring timelines.
+2,8,Aisha Rahman,Rahman Consulting,12,false,false,23,cold,false,"Aisha has an early idea for a freelancer app with no concrete plans yet. She has a budget under $5,000 and is just exploring."
+2,9,Grace Kim,Kim Realty,0,false,false,28,cold,false,"Grace needs SEO and Facebook ads management for her property listings, which falls outside Northwind's software development services. Her budget is uncertain with a 3–6 month timeline."
+2,10,Kevin Liu,Student,0,false,true,10,cold,false,Kevin is a computer science student looking for an internship at Northwind Digital rather than seeking software development services.
+2,11,asdf,qwerty,0,true,false,0,cold,false,SPAM: The lead provided gibberish test text and a cryptocurrency promotion.
+2,12,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a mobile version of their client portal, matching mobile app development services, with a $25,000+ budget and a timeline within 1 month."
+3,1,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a custom web portal for real-time shipment tracking that integrates with SAP. Budget is $25,000+ with a timeline within 1 month."
+3,2,Marcus Okafor,Okafor Dental Group,25,false,false,85,hot,false,"Marcus needs a patient booking mobile app for iOS and Android integrated with clinic management software, with a budget of $10,000–$25,000 and a 1–3 month timeline."
+3,3,Elena Rossi,Rossi & Partners Law,25,false,false,75,hot,false,"Elena needs an internal tool to manage case documents and court deadlines, with a budget of $10,000–$25,000 and a timeline of 3–6 months."
+3,4,Daniel Moreno,Moreno Coffee Roasters,25,false,false,80,hot,false,"Daniel needs to integrate his Shopify store with an inventory sheet and Xero accounting. They have a budget of $5,000–$10,000 and a timeline within 1 month."
+3,5,James Whitaker,Whitaker Home Renovations,25,false,false,68,warm,false,"James wants a website quote calculator and automatic follow-up emails, aligning with Northwind's web development and automation services. They have a budget of $5,000–$10,000 and a 1–3 month timeline."
+3,6,Priya Nair,Lumen Yoga Studio,12,false,false,45,warm,false,"Priya needs a simple website showing a weekly class schedule, with a budget under $5,000 and a timeline of 1–3 months."
+3,7,Tom Becker,Becker Manufacturing GmbH,25,false,false,48,warm,false,Tom needs a custom internal tool to digitize machine maintenance reports. He has no budget yet and is just exploring.
+3,8,Aisha Rahman,Rahman Consulting,12,false,false,23,cold,false,"Aisha has an early idea for a freelancer app and is exploring prices with a budget under $5,000 and an undetermined timeline."
+3,9,Grace Kim,Kim Realty,0,false,false,28,cold,false,"Grace needs SEO and Facebook ads management for her property listings, which falls outside Northwind's core development services. She has an undetermined budget and a 3-6 month timeline."
+3,10,Kevin Liu,Student,0,false,true,10,cold,false,Kevin is a computer science student looking for an internship and sharing his portfolio.
+3,11,asdf,qwerty,0,true,false,0,cold,false,SPAM: The need consists of test text and cryptocurrency promotion.
+3,12,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a mobile version of their client portal. They have a budget of $25,000+ and a timeline of within 1 month."
+4,1,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a custom client shipment tracking portal integrated with SAP. The budget is $25,000+ and the timeline is within 1 month."
+4,2,Marcus Okafor,Okafor Dental Group,25,false,false,85,hot,false,"Marcus needs a patient booking mobile app for iOS and Android integrated with clinic software, with a budget of $10,000–$25,000 and a timeline of 1–3 months."
+4,3,Elena Rossi,Rossi & Partners Law,25,false,false,75,hot,false,"Elena needs an internal tool to manage case documents and court deadlines, backed by a $10,000–$25,000 budget and a 3–6 month timeline."
+4,4,Daniel Moreno,Moreno Coffee Roasters,25,false,false,80,hot,false,"Daniel needs an integration between Shopify, an inventory sheet, and Xero. He has a budget of $5,000–$10,000 and wants to start within 1 month."
+4,5,James Whitaker,Whitaker Home Renovations,25,false,false,68,warm,false,"James wants a website quote calculator and automatic follow-up emails, fitting within a $5,000–$10,000 budget and a 1–3 month timeline."
+4,6,Priya Nair,Lumen Yoga Studio,12,false,false,45,warm,false,"Priya needs a simple website to show their weekly class schedule. They have a budget under $5,000 and a timeline of 1 to 3 months."
+4,7,Tom Becker,Becker Manufacturing GmbH,25,false,false,48,warm,false,Tom needs a custom internal tool to digitize machine maintenance reports. He is unsure about the budget and is just exploring at this time.
+4,8,Aisha Rahman,Rahman Consulting,12,false,false,23,cold,false,"Aisha has an early idea for a freelancer app and is curious about pricing. She has a budget under $5,000 and a timeline of just exploring."
+4,9,Grace Kim,Kim Realty,0,false,false,28,cold,false,"Grace needs SEO services and Facebook ads for property listings, which are outside Northwind's scope of custom software and integration. She has an undetermined budget and a 3-6 month timeline."
+4,10,Kevin Liu,Student,0,false,true,10,cold,false,Kevin is a computer science student looking for an internship at Northwind Digital rather than seeking software development services.
+4,11,asdf,qwerty,0,true,false,0,cold,false,SPAM: The lead provided gibberish test text and a cryptocurrency promotion.
+4,12,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a mobile version of their client portal, matching mobile app development services, with a $25,000+ budget and a 1-month timeline."
+5,1,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a custom shipment tracking web portal that integrates with SAP, backed by a $25,000+ budget and a 1-month timeline."
+5,2,Marcus Okafor,Okafor Dental Group,25,false,false,85,hot,false,"Marcus needs a patient booking mobile app for iOS and Android integrated with clinic software, with a budget of $10,000–$25,000 and a timeline of 1–3 months."
+5,3,Elena Rossi,Rossi & Partners Law,25,false,false,75,hot,false,"Elena needs an internal tool to manage case documents and court deadlines, with a budget of $10,000–$25,000 and a 3–6 month timeline."
+5,4,Daniel Moreno,Moreno Coffee Roasters,25,false,false,80,hot,false,"Daniel needs a system integration between Shopify, inventory sheets, and Xero to automate manual data entry. He has a budget of $5,000–$10,000 and a timeline within 1 month."
+5,5,James Whitaker,Whitaker Home Renovations,25,false,false,68,warm,false,"James wants a website quote calculator and automatic follow-up emails, aligning with workflow automation and custom web development. They have a $5k-$10k budget and a 1-3 month timeline."
+5,6,Priya Nair,Lumen Yoga Studio,12,false,false,45,warm,false,"Priya needs a simple website showing the weekly class schedule, with a budget under $5,000 and a timeline of 1-3 months."
+5,7,Tom Becker,Becker Manufacturing GmbH,25,false,false,48,warm,false,Tom needs a custom internal tool to digitize machine maintenance reports. He is unsure about the budget and is just exploring timelines.
+5,8,Aisha Rahman,Rahman Consulting,12,false,false,23,cold,false,"Aisha has an early idea for a freelancer app with no concrete plans yet. She has a budget under $5,000 and is just exploring timelines."
+5,9,Grace Kim,Kim Realty,0,false,false,28,cold,false,"Grace needs SEO and Facebook ads for property listings, which falls outside Northwind's services. They are unsure about the budget and have a 3-6 month timeline."
+5,10,Kevin Liu,Student,0,false,true,10,cold,false,Kevin is a computer science student looking for an internship and has attached his portfolio.
+5,11,asdf,qwerty,0,true,false,0,cold,false,SPAM: The lead submitted gibberish and crypto promotion text instead of a valid project need.
+5,12,Sarah Chen,Brightline Logistics,25,false,false,100,hot,false,"Sarah needs a mobile version of their client portal, matching mobile app development services. They have a budget of $25,000+ and a timeline within 1 month."

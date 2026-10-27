@@ -57,7 +57,7 @@ Measured on n8n 2.35.7 with free plans, October 2026, using the 12 fictional sub
 
 | Test | Result |
 |---|---|
-| Scoring | 12 of 12 leads landed in the expected category, in 3 test runs |
+| Scoring consistency | The same 12 leads scored 5 times: 60 of 60 in the expected category, and every lead got the same score each time ([details](evals/README.md)) |
 | 12 submissions | 10 HubSpot contacts: 1 spam filtered, 1 duplicate merged into the existing contact |
 | Notifications | 5 Slack alerts (4 new hot leads + 1 returning hot lead), 11 auto-replies (spam gets none) |
 | One lead, end to end | About 10 seconds from form submit to HubSpot, Slack and email (recorded demo) |
@@ -108,6 +108,7 @@ I built this with Claude (Anthropic) as my pair programmer. Claude drafted the f
 - `test_mode` sends every auto-reply to `test_inbox`, with `[TEST → lead email]` in the subject. The test leads also use `example.com` domains, which can't receive email.
 - To test the CRM error path, set `simulate_crm_error_for` in **Config** to one test lead's email. HubSpot rejects that lead and it lands in the error log.
 - To test the AI error path, change the Gemini model name to one that doesn't exist and run again.
+- To check how stable the AI scoring is, follow the consistency test in [`evals/README.md`](evals/README.md).
 
 ### 4. Go live
 
@@ -126,6 +127,10 @@ workflow/lead-qualifier.json        n8n workflow (no credentials included)
 sample-data/test-leads.json         12 fictional test submissions
 sample-data/error-log-template.csv  Headers for the Google Sheets error log
 images/workflow-canvas.png          Screenshot of the workflow
+evals/README.md                     Consistency test: method, measures and results
+evals/expected-results.csv          Expected score for each test lead
+evals/check-consistency.js          Checker for the consistency test (Node, no dependencies)
+evals/results/                      Results of the consistency test (no email addresses)
 ```
 
 ## About

@@ -1,0 +1,13 @@
+lead,name,company,company_size,budget,timeline,score_budget,score_timeline,score_size,expected_need_fit,expected_is_spam,expected_is_job_seeker,expected_score,expected_category,what_it_tests
+1,Sarah Chen,Brightline Logistics,51–200,"$25,000+",Within 1 month,35,25,15,25,false,false,100,hot,Ideal lead
+2,Marcus Okafor,Okafor Dental Group,11–50,"$10,000–$25,000",1–3 months,25,20,15,25,false,false,85,hot,Clear fit with a mid-size budget
+3,Elena Rossi,Rossi & Partners Law,11–50,"$10,000–$25,000",3–6 months,25,10,15,25,false,false,75,hot,Just above the hot threshold
+4,Daniel Moreno,Moreno Coffee Roasters,11–50,"$5,000–$10,000",Within 1 month,15,25,15,25,false,false,80,hot,Medium budget but wants to start now
+5,James Whitaker,Whitaker Home Renovations,2–10,"$5,000–$10,000",1–3 months,15,20,8,25,false,false,68,warm,Just below the hot threshold
+6,Priya Nair,Lumen Yoga Studio,2–10,"Under $5,000",1–3 months,5,20,8,12,false,false,45,warm,Partial fit (simple website)
+7,Tom Becker,Becker Manufacturing GmbH,201+,Not sure yet,Just exploring,10,3,10,25,false,false,48,warm,Large company that is not ready yet
+8,Aisha Rahman,Rahman Consulting,Just me,"Under $5,000",Just exploring,5,3,3,12,false,false,23,cold,Vague idea
+9,Grace Kim,Kim Realty,2–10,Not sure yet,3–6 months,10,10,8,0,false,false,28,cold,Outside the agency's services (SEO and ads)
+10,Kevin Liu,Student,Just me,"Under $5,000",Within 1 month,5,25,3,0,false,true,10,cold,Job seeker rule: score capped at 10 (need fit does not change the score)
+11,asdf,qwerty,Just me,Not sure yet,Just exploring,10,3,3,0,true,false,0,cold,Spam: score 0 (need fit does not change the score)
+12,Sarah Chen,Brightline Logistics,51–200,"$25,000+",Within 1 month,35,25,15,25,false,false,100,hot,Repeat submission from lead 1

@@ -1,0 +1,13 @@
+lead,name,expected_score,expected_category,run_1_score,run_2_score,run_3_score,run_4_score,run_5_score,run_1_category,run_2_category,run_3_category,run_4_category,run_5_category,score_difference,same_score_every_run
+1,Sarah Chen,100,hot,100,100,100,100,100,hot,hot,hot,hot,hot,0,yes
+2,Marcus Okafor,85,hot,85,85,85,85,85,hot,hot,hot,hot,hot,0,yes
+3,Elena Rossi,75,hot,75,75,75,75,75,hot,hot,hot,hot,hot,0,yes
+4,Daniel Moreno,80,hot,80,80,80,80,80,hot,hot,hot,hot,hot,0,yes
+5,James Whitaker,68,warm,68,68,68,68,68,warm,warm,warm,warm,warm,0,yes
+6,Priya Nair,45,warm,45,45,45,45,45,warm,warm,warm,warm,warm,0,yes
+7,Tom Becker,48,warm,48,48,48,48,48,warm,warm,warm,warm,warm,0,yes
+8,Aisha Rahman,23,cold,23,23,23,23,23,cold,cold,cold,cold,cold,0,yes
+9,Grace Kim,28,cold,28,28,28,28,28,cold,cold,cold,cold,cold,0,yes
+10,Kevin Liu,10,cold,10,10,10,10,10,cold,cold,cold,cold,cold,0,yes
+11,asdf,0,cold,0,0,0,0,0,cold,cold,cold,cold,cold,0,yes
+12,Sarah Chen,100,hot,100,100,100,100,100,hot,hot,hot,hot,hot,0,yes
